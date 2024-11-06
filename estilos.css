@@ -76,9 +76,9 @@ nav a:hover {
 }
 
 #modificar {
-    display: none;
+    display: block;
 }
 
 #consultar {
-    display: none;
+    display: block;
 }

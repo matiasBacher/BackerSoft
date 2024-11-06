@@ -9,7 +9,7 @@ class SolicitudEmpleoControlador{
         int $dni,
         int $idPuesto,
         int $annosDeExperiencia = null,
-        int $experiencia=null){
+        string $experiencia=null){
             global $entityManager;
             $puesto=$entityManager->find(modelos\Puestos::class, $idPuesto);
             $solicitud = new SolicitudEmpleo($nombre, 
@@ -30,13 +30,13 @@ class SolicitudEmpleoControlador{
         }
     }
         static function ModificarSolicitud(
-                int $id,
+                int $id, 
                 string $nombre=null,
                 string $apellido=null,
                 int $dni=null,
                 int $idPuesto=null,
                 int $annosDeExperiencia = null,
-                int $experiencia=null){
+                string $experiencia=null){
 
                 global $entityManager;
 

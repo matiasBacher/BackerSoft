@@ -1,4 +1,13 @@
+<?php
+require_once "bootstrap.php";
+require_once "controlador/solicitudEmpleoControlador.php";
+require_once "controlador/puestoControlador.php";
+$puestos= PuestosControlador::devolverTodos();
+
+?>
+
 <html>
+
 <head>
     <title>Registrar Solicitudes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -14,7 +23,39 @@
     <nav>
         <a href="index.php" onclick= "consultar()">Consultar Solicitudes</a>
     </nav>
-    < class="container">
+    <div class="container">
+
+            <?php 
+            $Mensaje = '';
+            $Estilo = 'warning';
+            if (!empty($_POST['BotonRegistrar'])) {
+              
+              if (empty($Mensaje)) {
+                if (SolicitudEmpleoControlador::registrarSolicitud(nombre: $_POST['nombre'],
+                                                                    apellido: $_POST['apellido'], 
+                                                                    dni: intval($_POST['dni']), 
+                                                                    idPuesto: intval($_POST['puesto']), 
+                                                                    annosDeExperiencia: $_POST['anos'],
+                                                                    experiencia: $_POST["trabajos"])=="ok" ){
+                  $Mensaje = 'Se ha registrado correctamente.';
+                  $_POST = array();
+                  $Estilo = 'success';
+                } ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <i class="bi bi-check-circle me-1"></i>
+                  <?php echo $Mensaje; ?>
+                </div>
+              <?php  } else { ?>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <i class="bi bi-exclamation-triangle me-1"></i>
+                  <?php echo $Mensaje; ?>
+                </div><?php }
+                  } ?>
+            
+           
+
+
+   
         <div id="registro" class="form-container">
             <h2>Registro de Solicitudes</h2>
             <form method="post">
@@ -35,20 +76,21 @@
                     <input type="text" id="trabajos" name="trabajos" required>
                 </div>
                 <div class="form-group">
-                    <label for="fecha">Fecha:</label>
-                    <input type="date" id="fecha" name="fecha" required>
+                    <label for="anos">Años de experiencia:</label>
+                    <input type="text" id="anos" name="anos" required>
                 </div>
                 <div class="form-group">
                     <label for="puesto">Puesto:</label>
                     <select id="puesto" name="puesto" required>
-                        <option value="panadero">Panadero</option>
-                        <option value="repostero">Repostero</option>
-                        <option value="cajero">Cajero</option>
-                        <option value="limpieza">Limpieza</option>
+                        
+                       <?php  foreach($puestos as $puesto ){ ?>
+                        <option value="<?=$puesto->getId()?>"><?=$puesto->getDescripcion()?></option>
+
+                        <?php }?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <button type="submit">Registrar</button>
+                    <button type="submit" value="registrar" name="BotonRegistrar">Registrar</button>
                 </div>
             </form>
         </div>

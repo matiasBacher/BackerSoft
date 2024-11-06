@@ -23,7 +23,7 @@ $puestos= PuestosControlador::devolverTodos();
     <nav>
         <a href="index.php" onclick= "consultar()">Consultar Solicitudes</a>
     </nav>
-    < class="container">
+    <div class="container">
 
             <?php 
             $Mensaje = '';
@@ -31,7 +31,12 @@ $puestos= PuestosControlador::devolverTodos();
             if (!empty($_POST['BotonRegistrar'])) {
               
               if (empty($Mensaje)) {
-                if (SolicitudEmpleoControlador::registrarSolicitud($_POST['nombre'], $_POST['apellido'], $_POST['dni'], $_POST['fecha'], $_POST['anos'],$_POST['puesto']) == 'ok') {
+                if (SolicitudEmpleoControlador::registrarSolicitud(nombre: $_POST['nombre'],
+                                                                    apellido: $_POST['apellido'], 
+                                                                    dni: intval($_POST['dni']), 
+                                                                    idPuesto: intval($_POST['puesto']), 
+                                                                    annosDeExperiencia: $_POST['anos'],
+                                                                    experiencia: $_POST["trabajos"])=="ok" ){
                   $Mensaje = 'Se ha registrado correctamente.';
                   $_POST = array();
                   $Estilo = 'success';
@@ -47,7 +52,7 @@ $puestos= PuestosControlador::devolverTodos();
                 </div><?php }
                   } ?>
             
-            ?>
+           
 
 
    
@@ -75,15 +80,11 @@ $puestos= PuestosControlador::devolverTodos();
                     <input type="text" id="anos" name="anos" required>
                 </div>
                 <div class="form-group">
-                    <label for="fecha">Fecha:</label>
-                    <input type="date" id="fecha" name="fecha" required>
-                </div>
-                <div class="form-group">
                     <label for="puesto">Puesto:</label>
                     <select id="puesto" name="puesto" required>
                         
                        <?php  foreach($puestos as $puesto ){ ?>
-                        <option value="<?=puesto->getId()?>"><?=puesto->getDescripcion()?></option>
+                        <option value="<?=$puesto->getId()?>"><?=$puesto->getDescripcion()?></option>
 
                         <?php }?>
                     </select>

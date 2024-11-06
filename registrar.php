@@ -31,7 +31,7 @@ require_once "controlador/puestoControlador.php";
             if (!empty($_POST['BotonRegistrar'])) {
               
               if (empty($Mensaje)) {
-                if (SolicitudEmpleoControlador::registrarSolicitud($_POST['nombre'], $_POST['apellido'], $_POST['dni'], $_POST['fecha'], $_POST['anos'],$_POST['puesto']) != false) {
+                if (SolicitudEmpleoControlador::registrarSolicitud($_POST['nombre'], $_POST['apellido'], $_POST['dni'], $_POST['fecha'], $_POST['anos'],$_POST['puesto']) == 'ok') {
                   $Mensaje = 'Se ha registrado correctamente.';
                   $_POST = array();
                   $Estilo = 'success';

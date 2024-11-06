@@ -2,7 +2,7 @@
 require_once "bootstrap.php";
 require_once "controlador/solicitudEmpleoControlador.php";
 require_once "controlador/puestoControlador.php";
-
+$puestos= PuestosControlador::devolverTodos();
 
 ?>
 
@@ -81,10 +81,11 @@ require_once "controlador/puestoControlador.php";
                 <div class="form-group">
                     <label for="puesto">Puesto:</label>
                     <select id="puesto" name="puesto" required>
-                        <option value="panadero">Panadero</option>
-                        <option value="repostero">Repostero</option>
-                        <option value="cajero">Cajero</option>
-                        <option value="limpieza">Limpieza</option>
+                        
+                       <?php  foreach($puestos as $puesto ){ ?>
+                        <option value="<?=puesto->getId()?>"><?=puesto->getDescripcion()?></option>
+
+                        <?php }?>
                     </select>
                 </div>
                 <div class="form-group">

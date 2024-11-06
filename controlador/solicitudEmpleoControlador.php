@@ -122,4 +122,9 @@ class SolicitudEmpleoControlador{
         return $solicitudes;
                                             
     }
+    static function buscarTodo(){
+        global $entityManager;
+        $solicitudes=$entityManager->getRepository(SolicitudEmpleo::class)->findAll();
+        return $solicitudes;
+    }
 }

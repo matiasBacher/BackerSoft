@@ -1,3 +1,36 @@
+<?php 
+    require_once "bootstrap.php";
+    require_once "controlador/solicitudEmpleoControlador.php";
+    require_once "controlador/puestoControlador.php";
+    $puestos = PuestosControlador::devolverTodos();
+
+    if(isset($_POST["puesto"])){
+        if(isset($_POST["fechaMinima"])){
+            $fechaMinima= $_POST["fechaMinima"];
+        }
+        else{
+            $fechaMinima= date("Y-m-d");;
+        }
+        if(isset($_POST["fechaMaxima"])){
+            $fechaMaxima= $_POST["fechaMaxima"];
+        }
+        else{
+            $fechaMaxima= date("Y-m-d");
+        }
+        if(isset($_POST["puesto"])){
+            $idPuesto=[$_POST["idPuesto"]];
+        }
+        else{
+
+            $idPuesto=[""];
+        }
+           $solicitudes= SolicitudEmpleoControlador::ConsultarSolicitudes($fechaMinima, $fechaMaxima, $idPuesto);
+
+        }
+    else{
+        $solicitudes= SolicitudEmpleoControlador::buscarTodo();
+    }
+    ?>
 <html>
 <head>
     <title>Gestión de Solicitudes</title>
@@ -22,17 +55,21 @@
             <h2>Consultar Solicitudes</h2>
             <form method="post">
                 <div class="form-group">
-                    <label for="fecha">Fecha:</label>
-                    <input type="date" id="fecha" name="fecha">
+                    <label for="fechaMinima">Desde:</label>
+                    <input type="date" id="fechafechaMinima" name="fechaMinima">
+                </div>
+                <div class="form-group">
+                    <label for="fechaMaxima">Hasta:</label>
+                    <input type="date" id="fechaMaxima" name="fechaMaxima">
                 </div>
                 <div class="form-group">
                     <label for="puesto">Puesto:</label>
                     <select id="puesto" name="puesto">
                         <option value="">Seleccione un puesto</option>
-                        <option value="panadero">Panadero</option>
-                        <option value="repostero">Repostero</option>
-                        <option value="cajero">Cajero</option>
-                        <option value="limpieza">Limpieza</option>
+                        <?php foreach($puestos as $puesto){?>
+                        <option value="<?=$puesto->getId()?>"><?=$puesto->getDescripcion()?></option>
+
+                        <?php }?>
                     </select>
                 </div>
                 <div class="form-group">
@@ -48,75 +85,26 @@
                     <th scope="col">Nombre</th>
                     <th scope="col">Apellido</th>
                     <th scope="col">DNI</th>
-                    <th scope="col">Puesto</th>
+                    <th scope="col">Puesto solicitado</th>
                     <th scope="col">Trabajos</th>
+                    <th scope="col">Años Experiencia</th>
+                    <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
+                <?php foreach($solicitudes as $solicitud){?>
                 <tr>
-                    <td>2023-10-05</td>
-                    <td>Pedro</td>
-                    <td>Fernández</td>
-                    <td>55667788</td>
-                    <td>Tester</td>
-                    <td>Proyecto I, Proyecto J</td>
+                    <td><?=$solicitud->getFechaCreacion()->format("Y-m-d")?></td>
+                    <td><?=$solicitud->getNombre()?></td>
+                    <td><?=$solicitud->getApellido()?></td>
+                    <td><?=$solicitud->getDni()?></td>
+                    <td><?=$solicitud->getPuestoRequerido()->getDescripcion()?></td>
+                    <td><?=$solicitud->getOtrosTrabajos()?></td>
+                    <td><?=$solicitud->getAnnosDeExperiencia()?></td>
+                    <td><button type="button" class="btn btn-primary">Modificar</button></td>
+
                 </tr>
-                <tr>
-                    <td>2023-10-06</td>
-                    <td>Lucía</td>
-                    <td>García</td>
-                    <td>99887766</td>
-                    <td>Soporte</td>
-                    <td>Proyecto K, Proyecto L</td>
-                </tr>
-                <tr>
-                    <td>2023-10-07</td>
-                    <td>Jorge</td>
-                    <td>Lopez</td>
-                    <td>66554433</td>
-                    <td>Administrador</td>
-                    <td>Proyecto M, Proyecto N</td>
-                </tr>
-                <tr>
-                    <td>2023-10-08</td>
-                    <td>Elena</td>
-                    <td>Hernández</td>
-                    <td>33445566</td>
-                    <td>Consultora</td>
-                    <td>Proyecto O, Proyecto P</td>
-                </tr>
-                <tr>
-                    <td>2023-10-09</td>
-                    <td>Raúl</td>
-                    <td>Ramírez</td>
-                    <td>22334455</td>
-                    <td>Arquitecto</td>
-                    <td>Proyecto Q, Proyecto R</td>
-                </tr>
-                <tr>
-                    <td>2023-10-10</td>
-                    <td>Laura</td>
-                    <td>Vargas</td>
-                    <td>77889900</td>
-                    <td>Ingeniera</td>
-                    <td>Proyecto S, Proyecto T</td>
-                </tr>
-                <tr>
-                    <td>2023-10-11</td>
-                    <td>Diego</td>
-                    <td>Silva</td>
-                    <td>11224433</td>
-                    <td>Coordinador</td>
-                    <td>Proyecto U, Proyecto V</td>
-                </tr>
-                <tr>
-                    <td>2023-10-12</td>
-                    <td>Paula</td>
-                    <td>Morales</td>
-                    <td>99882211</td>
-                    <td>Especialista</td>
-                    <td>Proyecto W, Proyecto X</td>
-                </tr>
+                <?php }?>
               
             
             </tbody>

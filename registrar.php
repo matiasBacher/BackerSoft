@@ -1,4 +1,13 @@
+<?php
+require_once "bootstrap.php";
+require_once "controlador/solicitudEmpleoControlador.php";
+require_once "controlador/puestoControlador.php";
+
+
+?>
+
 <html>
+
 <head>
     <title>Registrar Solicitudes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
@@ -15,6 +24,33 @@
         <a href="index.php" onclick= "consultar()">Consultar Solicitudes</a>
     </nav>
     < class="container">
+
+            <?php 
+            $Mensaje = '';
+            $Estilo = 'warning';
+            if (!empty($_POST['BotonRegistrar'])) {
+              
+              if (empty($Mensaje)) {
+                if (SolicitudEmpleoControlador::registrarSolicitud($_POST['nombre'], $_POST['apellido'], $_POST['dni'], $_POST['fecha'], $_POST['anos'],$_POST['puesto']) != false) {
+                  $Mensaje = 'Se ha registrado correctamente.';
+                  $_POST = array();
+                  $Estilo = 'success';
+                } ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  <i class="bi bi-check-circle me-1"></i>
+                  <?php echo $Mensaje; ?>
+                </div>
+              <?php  } else { ?>
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <i class="bi bi-exclamation-triangle me-1"></i>
+                  <?php echo $Mensaje; ?>
+                </div><?php }
+                  } ?>
+            
+            ?>
+
+
+   
         <div id="registro" class="form-container">
             <h2>Registro de Solicitudes</h2>
             <form method="post">
@@ -35,6 +71,10 @@
                     <input type="text" id="trabajos" name="trabajos" required>
                 </div>
                 <div class="form-group">
+                    <label for="anos">Años de experiencia:</label>
+                    <input type="text" id="anos" name="anos" required>
+                </div>
+                <div class="form-group">
                     <label for="fecha">Fecha:</label>
                     <input type="date" id="fecha" name="fecha" required>
                 </div>
@@ -48,7 +88,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <button type="submit">Registrar</button>
+                    <button type="submit" value="registrar" name="BotonRegistrar">Registrar</button>
                 </div>
             </form>
         </div>

@@ -4,25 +4,36 @@
     require_once "controlador/puestoControlador.php";
     $puestos = PuestosControlador::devolverTodos();
 
-    if(isset($_POST["puesto"])){
-        if(isset($_POST["fechaMinima"])){
+    if(
+        !(
+        !isset($_POST["buscar"])  or 
+        (empty($_POST["fechaMinima"]) and empty($_POST["fechaMaxima"]) and empty($_POST["puesto"]))
+        ) 
+    )
+        
+        {
+        if(isset($_POST["fechaMinima"]) and !empty($_POST["fechaMinima"])){
             $fechaMinima= $_POST["fechaMinima"];
         }
         else{
-            $fechaMinima= date("Y-m-d");;
+            $fechaMinima= "1970-1-1";
         }
-        if(isset($_POST["fechaMaxima"])){
+        if(isset($_POST["fechaMaxima"]) and !empty($_POST["fechaMaxima"])){
             $fechaMaxima= $_POST["fechaMaxima"];
         }
         else{
-            $fechaMaxima= date("Y-m-d");
+            $fechaMaxima= "2100-12-31";
         }
-        if(isset($_POST["puesto"])){
-            $idPuesto=[$_POST["idPuesto"]];
+        if(isset($_POST["puesto"]) and !empty($_POST["puesto"])){
+            $idPuesto=[$_POST["puesto"]];
         }
         else{
 
-            $idPuesto=[""];
+
+            $idPuesto=[];
+            foreach($puestos as $p){
+                $idPuesto[]=$p->getId();
+            }
         }
            $solicitudes= SolicitudEmpleoControlador::ConsultarSolicitudes($fechaMinima, $fechaMaxima, $idPuesto);
 
@@ -56,24 +67,27 @@
             <form method="post">
                 <div class="form-group">
                     <label for="fechaMinima">Desde:</label>
-                    <input type="date" id="fechafechaMinima" name="fechaMinima">
+                    <input type="date" id="fechafechaMinima" name="fechaMinima"
+                    <?=isset($_POST["fechaMinima"]) and !empty($_POST["fechaMinima"])? "value='{$_POST["fechaMinima"]}'":""?>  >
+
                 </div>
                 <div class="form-group">
                     <label for="fechaMaxima">Hasta:</label>
-                    <input type="date" id="fechaMaxima" name="fechaMaxima">
+                    <input type="date" id="fechaMaxima" name="fechaMaxima"
+                    <?=isset($_POST["fechaMaxima"]) and !empty($_POST["fechaMaxima"])? "value='{$_POST["fechaMaxima"]}'":""?>  >
                 </div>
                 <div class="form-group">
                     <label for="puesto">Puesto:</label>
                     <select id="puesto" name="puesto">
                         <option value="">Seleccione un puesto</option>
                         <?php foreach($puestos as $puesto){?>
-                        <option value="<?=$puesto->getId()?>"><?=$puesto->getDescripcion()?></option>
+                        <option value="<?=$puesto->getId()?>"><?=$puesto->getDescripcion()?>></option>
 
                         <?php }?>
                     </select>
                 </div>
                 <div class="form-group">
-                    <button type="submit">Buscar</button>
+                    <button type="submit" value="b" name="buscar">Buscar</button>
                 </div>
             </form>
             <div class="container mt-5">
@@ -101,7 +115,7 @@
                     <td><?=$solicitud->getPuestoRequerido()->getDescripcion()?></td>
                     <td><?=$solicitud->getOtrosTrabajos()?></td>
                     <td><?=$solicitud->getAnnosDeExperiencia()?></td>
-                    <td><button type="button" class="btn btn-primary">Modificar</button></td>
+                    <td><a href="modificar.php?id=<?=$solicitud->getId()?>" class="btn btn-info" role="button">Modificar</a></td>
 
                 </tr>
                 <?php }?>

@@ -103,7 +103,7 @@ class SolicitudEmpleoControlador{
         
     }
 
-    static function ConsultarSolicitudes(string $fechaMinima, string $fechaMaxima, array $idPuestosRequeridos): array{
+    static function ConsultarSolicitudes(?string $fechaMinima = null, ?string $fechaMaxima = null, array $idPuestosRequeridos ): array{
         global $entityManager;
 
         $fMax=new DateTime($fechaMaxima);
@@ -126,5 +126,9 @@ class SolicitudEmpleoControlador{
         global $entityManager;
         $solicitudes=$entityManager->getRepository(SolicitudEmpleo::class)->findAll();
         return $solicitudes;
+    }
+    static function devolverUna($id){
+        global $entityManager;
+        return $entityManager->find(SolicitudEmpleo::class, $id); 
     }
 }

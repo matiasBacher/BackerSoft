@@ -47,9 +47,8 @@ if(isset($_POST["registrar"])){
         <h1>Gestión de Solicitudes</h1>
     </header>
     <nav>
-        <a href="#registro" onclick= "registrar()">Registro de Solicitudes</a>
-        <a href="#modificar" onclick= "modificar()">Modificar Solicitud</a>
-        <a href="#consultar" onclick= "consultar()">Consultar Solicitudes</a>
+        <a href="registrar.php" onclick= "registrar()">Registro de Solicitudes</a>
+        <a href="index.php" onclick= "consultar()">Consultar Solicitudes</a>
     </nav>
     <div class="container">   
         <?php if($bandera){?>

@@ -68,20 +68,23 @@
                 <div class="form-group">
                     <label for="fechaMinima">Desde:</label>
                     <input type="date" id="fechafechaMinima" name="fechaMinima"
-                    <?=isset($_POST["fechaMinima"]) and !empty($_POST["fechaMinima"])? "value='{$_POST["fechaMinima"]}'":""?>  >
+                    <?=(isset($_POST["fechaMinima"]) and !empty($_POST["fechaMinima"]))? "value='{$_POST["fechaMinima"]}'":""?>  >
 
                 </div>
                 <div class="form-group">
                     <label for="fechaMaxima">Hasta:</label>
                     <input type="date" id="fechaMaxima" name="fechaMaxima"
-                    <?=isset($_POST["fechaMaxima"]) and !empty($_POST["fechaMaxima"])? "value='{$_POST["fechaMaxima"]}'":""?>  >
+                    <?=(isset($_POST["fechaMaxima"]) and !empty($_POST["fechaMaxima"]))? "value='{$_POST["fechaMaxima"]}'":""?>  >
                 </div>
                 <div class="form-group">
                     <label for="puesto">Puesto:</label>
                     <select id="puesto" name="puesto">
                         <option value="">Seleccione un puesto</option>
                         <?php foreach($puestos as $puesto){?>
-                        <option value="<?=$puesto->getId()?>"><?=$puesto->getDescripcion()?>></option>
+                        <option value="<?=$puesto->getId()?>" 
+                        <?=(isset($_POST["puesto"]) and !empty($_POST["puesto"]) and $puesto->getid()==intval($_POST["puesto"]))?'selected':""?>>
+                            <?=$puesto->getDescripcion()?> 
+                        </option>
 
                         <?php }?>
                     </select>
